@@ -59,4 +59,4 @@ jobs:
         # Add -auto-approve flag for non-interactive execution (not recommended for production)
 
       - name: Clean up Terraform plan
-        run: rm tfplan
+        run: rm /artefato/tfplan
