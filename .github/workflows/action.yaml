@@ -26,7 +26,8 @@ jobs:
       run: terraform init
 
     - name: Plan Terraform changes
-      run: terraform plan -var-file="prod.tfvars" -out=tfplan
+      run: mkdir -p artefato
+      run: terraform plan -var-file="prod.tfvars" -out=/artefato/tfplan
 
     - name: Publish Terraform Plan
       uses: actions/upload-artifact@v3
@@ -54,7 +55,7 @@ jobs:
       - name: Realizar o deploy
         run: echo "Realizando o deploy..."
       - name: Apply Terraform changes
-        run: terraform apply -input=false tfplan
+        run: terraform apply -input=false /artefato/tfplan
         # Add -auto-approve flag for non-interactive execution (not recommended for production)
 
       - name: Clean up Terraform plan
