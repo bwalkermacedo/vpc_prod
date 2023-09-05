@@ -1,4 +1,4 @@
-#exemplo de como usar artefato esta comentado e aprovação
+#exemplo de como usar artefato esta comentado e aprovação e usar steps
 name: Terraform AWS Deployment
 
 on:
@@ -43,10 +43,10 @@ jobs:
   #       id: approval
   #       run: echo "::Aguardando Aprovação"
 
-  cd_infra:
-    runs-on: ubuntu-latest
-    needs: ci_infra
-    steps:
+  # cd_infra:
+  #   runs-on: ubuntu-latest
+  #   needs: ci_infra
+  #   steps:
       # - name: Download Terraform Plan
       #   uses: actions/download-artifact@v3
       #   with:
