@@ -52,11 +52,11 @@ jobs:
       #   with:
       #     name: Plan Terraform changes
       #     path: '.' 
-      - name: Realizar o deploy
-        run: echo "Realizando o deploy..."
-      - name: Apply Terraform changes
-        run: terraform apply -input=false tfplan
+    - name: Realizar o deploy
+      run: echo "Realizando o deploy..."
+    - name: Apply Terraform changes
+      run: terraform apply -input=false tfplan
         # Add -auto-approve flag for non-interactive execution (not recommended for production)
 
-      - name: Clean up Terraform plan
-        run: rm tfplan
+    - name: Clean up Terraform plan
+      run: rm tfplan
