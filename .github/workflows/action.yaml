@@ -24,16 +24,15 @@ jobs:
 
     - name: Initialize Terraform
       run: terraform init
-    - name: Create folder
-      run: mkdir -m 777 artefato 
+
     - name: Plan Terraform changes
-      run: terraform plan -var-file="prod.tfvars" -out=/artefato/tfplan
+      run: terraform plan -var-file="prod.tfvars" -out=tfplan
 
     - name: Publish Terraform Plan
       uses: actions/upload-artifact@v3
       with:
         name: Plan Terraform changes
-        path: artefato
+        path: './tfplan'
   
   approval:
     runs-on: ubuntu-latest
@@ -55,8 +54,8 @@ jobs:
       - name: Realizar o deploy
         run: echo "Realizando o deploy..."
       - name: Apply Terraform changes
-        run: terraform apply -input=false /artefato/tfplan
+        run: terraform apply -input=false tfplan
         # Add -auto-approve flag for non-interactive execution (not recommended for production)
 
       - name: Clean up Terraform plan
-        run: rm 
+        run: rm tfplan
