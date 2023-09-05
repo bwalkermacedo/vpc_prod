@@ -1,0 +1,50 @@
+name: Terraform AWS Deployment
+
+on:
+  - pull_request
+
+jobs:
+  ci_infra:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0  # Adjust to the desired Terraform version
+    - name: AWS Login
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1  # Adjust to your AWS region
+
+    - name: Initialize Terraform
+      run: terraform init
+
+    - name: Plan Terraform changes
+      run: terraform plan -var-file="prod.tfvars" -out=tfplan
+  
+  approval:
+    runs-on: ubuntu-latest
+    needs: ci_infra
+    steps:
+      - name: Solicitar aprovação
+        id: approval
+        run: echo "::set-output name=approved::false"
+
+  cd_infra:
+    runs-on: ubuntu-latest
+    needs: approval
+    steps:
+      - name: Realizar o deploy
+        run: echo "Realizando o deploy..."
+      - name: Apply Terraform changes
+        run: terraform apply -input=false tfplan
+        # Add -auto-approve flag for non-interactive execution (not recommended for production)
+
+      - name: Clean up Terraform plan
+        run: rm tfplan
