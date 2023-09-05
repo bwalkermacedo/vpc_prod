@@ -25,7 +25,7 @@ jobs:
     - name: Initialize Terraform
       run: terraform init
     - name: Create folder
-      run: mkdir -p artefato
+      run: mkdir -m 777 artefato 
     - name: Plan Terraform changes
       run: terraform plan -var-file="prod.tfvars" -out=/artefato/tfplan
 
@@ -33,7 +33,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Plan Terraform changes
-        path: '.'
+        path: artefato
   
   approval:
     runs-on: ubuntu-latest
