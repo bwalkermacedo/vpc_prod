@@ -31,8 +31,7 @@ jobs:
     - name: Publish Terraform Plan
       uses: actions/upload-artifact@v3
       with:
-        name: Plan Terraform changes
-        path: tfplan      
+        name: Plan Terraform changes    
   
   approval:
     runs-on: ubuntu-latest
@@ -49,8 +48,7 @@ jobs:
       - name: Download Terraform Plan
         uses: actions/download-artifact@v3
         with:
-          name: Plan Terraform changes
-          path: tfplan     
+          name: Plan Terraform changes   
       - name: Realizar o deploy
         run: echo "Realizando o deploy..."
       - name: Apply Terraform changes
