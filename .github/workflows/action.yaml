@@ -40,7 +40,7 @@ jobs:
     steps:
       - name: Solicitar aprovação
         id: approval
-        run: echo "::set-output name=approved::false"
+        run: echo "::Aguardando Aprovação"
 
   cd_infra:
     runs-on: ubuntu-latest
