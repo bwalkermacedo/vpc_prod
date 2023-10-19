@@ -38,15 +38,13 @@ jobs:
     
     - name: Create PR
       if: github.ref == 'refs/heads/dev'  # Somente na branch "dev"
-      uses: softprops/action-gh-release@v1
+      uses: peter-evans/create-pull-request@v3
       with:
-        files: tfplan
         title: "Automated Terraform Plan PR"
-        draft: false
-        prerelease: false
-        target: main
+        body: "Automatically created PR for Terraform plan"
+        base: "main"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
 
   terraform_cd:
     name: CD - Terraform Apply
