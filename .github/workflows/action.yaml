@@ -96,6 +96,5 @@ jobs:
 
     - name: Terraform Destroy
       if: steps.check_commit.outputs.DESTROY == 'true'
-      run: |
-        terraform destroy -var-file="prod.tfvars" -auto-approve
-        working-directory: ./   
+      run: terraform destroy -var-file="prod.tfvars" -auto-approve
+      working-directory: ./   
