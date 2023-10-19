@@ -18,12 +18,13 @@ jobs:
       working-directory: ./
 
     - name: Plan Terraform Changes
+      id: terraform_plan
       run: terraform plan -var-file="prod.tfvars" -out=tfplan
       working-directory: ./
 
     - name: Wait for Manual Approval
       id: approval
-      needs: Plan Terraform Changes
+      needs: terraform_plan
       run: |
         echo "To approve, add a comment: '/approve'"
         while : ; do
