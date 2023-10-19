@@ -42,18 +42,9 @@ jobs:
     steps:
     - name: "Aprovação Manual"
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'  # Aprovação manual apenas no branch 'main'
-      uses: pullreminders/approve-pull-request@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "Aprovação Manual: Aprovar o pull request no GitHub antes de continuar."
 
-  apply:
-    needs: approve
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Apply Terraform Changes
-      run: terraform apply tfplan
-      working-directory: ./
 
 
 
