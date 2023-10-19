@@ -20,12 +20,12 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1  # Adjust to your AWS region
+        aws-region: us-east-1  # Ajuste para sua região da AWS
     
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
       with:
-        terraform_version: 1.0.0  # Adjust to the desired Terraform version
+        terraform_version: 1.0.0  # Ajuste para a versão desejada do Terraform
         
     - name: Initialize Terraform
       run: terraform init
@@ -34,20 +34,107 @@ jobs:
     - name: Plan Terraform Changes
       run: terraform plan -var-file="prod.tfvars" -out=tfplan
       working-directory: ./
-      
+    
     - name: "Aguardando Aprovação"
       id: approval
       run: echo "Aguardando aprovação manual"
     
-    - name: "Verificar Aprovação"
-      if: steps.approval.outputs.approved == 'true'
-      run: echo "Aprovado! Continuando com as etapas subsequentes"
-    
+  approve:
+    needs: terraform
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: "Aprovação Manual"
+      if: steps.approval.outputs.approved != 'true'
+      uses: actions/github-script@0.7.0
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          core.setOutput('approved', 'true')
+
+  apply:
+    needs: approve
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Apply Terraform Changes
       run: terraform apply tfplan
-      working-directory: ./
-      continue-on-error: true
+      working-directory: ./fdsfds
 
-    - name: Cleanup
-      run: rm -f tfplan
-      working-directory: ./
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Terraform Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+#       - feature/*
+
+# jobs:
+#   terraform:
+#     name: Deploy Terraform
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+    
+#     - name: AWS Login
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: us-east-1  # Adjust to your AWS region
+    
+#     - name: Set up Terraform
+#       uses: hashicorp/setup-terraform@v1
+#       with:
+#         terraform_version: 1.0.0  # Adjust to the desired Terraform version
+        
+#     - name: Initialize Terraform
+#       run: terraform init
+#       working-directory: ./
+
+#     - name: Plan Terraform Changes
+#       run: terraform plan -var-file="prod.tfvars" -out=tfplan
+#       working-directory: ./
+      
+#     - name: "Aguardando Aprovação"
+#       id: approval
+#       run: echo "Aguardando aprovação manual"
+    
+#     - name: "Verificar Aprovação"
+#       if: steps.approval.outputs.approved == 'true'
+#       run: echo "Aprovado! Continuando com as etapas subsequentes"
+    
+#     - name: Apply Terraform Changes
+#       run: terraform apply tfplan
+#       working-directory: ./
+#       continue-on-error: true
+
+#     - name: Cleanup
+#       run: rm -f tfplan
+#       working-directory: ./
