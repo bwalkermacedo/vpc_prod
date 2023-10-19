@@ -15,14 +15,15 @@ jobs:
 
     - name: Initialize Terraform
       run: terraform init
-      working-directory: /
+      working-directory: ./
 
     - name: Plan Terraform Changes
       run: terraform plan -var-file="prod.tfvars" -out=tfplan
-      working-directory: /
+      working-directory: ./
 
     - name: Wait for Manual Approval
       id: approval
+      needs: Plan Terraform Changes
       run: |
         echo "To approve, add a comment: '/approve'"
         while : ; do
@@ -39,9 +40,9 @@ jobs:
 
     - name: Apply Terraform Changes
       run: terraform apply tfplan
-      working-directory: /
+      working-directory: ./
       continue-on-error: true
 
     - name: Cleanup
       run: rm -f tfplan
-      working-directory: /
+      working-directory: ./
