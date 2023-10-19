@@ -26,7 +26,7 @@ jobs:
       with:
         terraform_version: 1.0.0  # Adjust to the desired Terraform version
       env:
-        GIT_TOKEN: ${{ secrets.YOUR_GITHUB_TOKEN }}
+        GIT_TOKEN: ${{ secrets.TF_GITHUB_TOKEN }}
 
     - name: Initialize Terraform
       run: terraform init
