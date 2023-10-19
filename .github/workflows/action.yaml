@@ -25,8 +25,6 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: 1.0.0  # Adjust to the desired Terraform version
-
-    - name: Github Token
       env:
         GIT_TOKEN: ${{ secrets.YOUR_GITHUB_TOKEN }}
 
