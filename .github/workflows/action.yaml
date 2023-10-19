@@ -7,6 +7,7 @@ on:
       - feature/*
 jobs:
   terraform:
+    name: Deploy Terraform
     runs-on: ubuntu-latest
 
     steps:
