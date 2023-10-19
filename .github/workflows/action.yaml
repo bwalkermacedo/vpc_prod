@@ -1,62 +1,64 @@
-#exemplo de como usar artefato esta comentado e aprovação e usar steps
-name: Terraform AWS Deployment
+name: Terraform Pipeline
 
 on:
-  - pull_request
+  push:
+    branches:
+      - dev
+      - main
 
 jobs:
-  ci_infra:
+  terraform_plan:
+    name: Terraform Plan
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'  # Executar somente na branch "dev"
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: 1.0.0  # Adjust to the desired Terraform version
     - name: AWS Login
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1  # Adjust to your AWS region
+        aws-region: us-east-1  # Ajuste para a sua região da AWS
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0  # Ajuste para a versão desejada do Terraform
 
     - name: Initialize Terraform
       run: terraform init
+      working-directory: ./
 
-    - name: Plan Terraform changes
+    - name: Plan Terraform Changes
       run: terraform plan -var-file="prod.tfvars" -out=tfplan
+      working-directory: ./
 
-    # - name: Publish Terraform Plan
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: Plan Terraform changes
-    #     path: './tfplan'
-  
-  # approval:
-  #   runs-on: ubuntu-latest
-  #   needs: ci_infra
-  #   steps:
-  #     - name: Solicitar aprovação
-  #       id: approval
-  #       run: echo "::Aguardando Aprovação"
+  terraform_apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  # Executar somente na branch "main"
 
-  # cd_infra:
-  #   runs-on: ubuntu-latest
-  #   needs: ci_infra
-  #   steps:
-      # - name: Download Terraform Plan
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: Plan Terraform changes
-      #     path: '.' 
-    - name: Realizar o deploy
-      run: echo "Realizando o deploy..."
-    - name: Apply Terraform changes
-      run: terraform apply -input=false tfplan
-        # Add -auto-approve flag for non-interactive execution (not recommended for production)
+    needs: terraform_plan  # Aguardar a conclusão do "terraform_plan" antes de iniciar
 
-    - name: Clean up Terraform plan
-      run: rm tfplan
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: AWS Login
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1  # Ajuste para a sua região da AWS
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0  # Ajuste para a versão desejada do Terraform
+
+    - name: Apply Terraform Changes
+      run: terraform apply tfplan
+      working-directory: ./
