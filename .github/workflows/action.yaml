@@ -1,4 +1,4 @@
-name: Terraform Pipeline
+name: Terraform CI/CD Pipeline
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
       - main
 
 jobs:
-  terraform_plan:
-    name: Terraform Plan
+  terraform_ci:
+    name: CI - Terraform Plan
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'  # Executar somente na branch "dev"
 
@@ -35,13 +35,13 @@ jobs:
     - name: Plan Terraform Changes
       run: terraform plan -var-file="prod.tfvars" -out=tfplan
       working-directory: ./
-
-  terraform_apply:
-    name: Terraform Apply
+    
+  terraform_cd:
+    name: CD - Terraform Apply
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'  # Executar somente na branch "main"
 
-    needs: terraform_plan  # Aguardar a conclusão do "terraform_plan" antes de iniciar
+    needs: terraform_ci
 
     steps:
     - name: Checkout code
@@ -58,6 +58,13 @@ jobs:
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: 1.0.0  # Ajuste para a versão desejada do Terraform
+    - name: Initialize Terraform
+      run: terraform init
+      working-directory: ./
+
+    - name: Plan Terraform Changes
+      run: terraform plan -var-file="prod.tfvars" -out=tfplan
+      working-directory: ./            
 
     - name: Apply Terraform Changes
       run: terraform apply tfplan
