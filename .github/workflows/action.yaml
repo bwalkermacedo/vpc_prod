@@ -9,7 +9,7 @@ jobs:
   terraform_ci:
     name: CI - Terraform Plan
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/dev'  # Executar somente na branch "dev"
+    if: "!contains(github.event.head_commit.message, '[destroy]')"  # Executar CI se a mensagem do commit não contiver [destroy]
 
     steps:
     - name: Checkout code
@@ -77,6 +77,14 @@ jobs:
     - name: Check Commit Message for [destroy]
       id: check_commit
       run: echo ::set-output name=DESTROY::$(if echo "${{ github.event.head_commit.message }}" | grep -q "\[destroy\]"; then echo "true"; else echo "false"; fi)
+    
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0  # Ajuste para a versão desejada do Terraform
+    - name: Initialize Terraform
+      run: terraform init
+      working-directory: ./      
 
     - name: Terraform Destroy
       if: steps.check_commit.outputs.DESTROY == 'true'
