@@ -65,3 +65,21 @@ jobs:
     - name: Apply Terraform Changes
       run: terraform apply tfplan
       working-directory: ./
+
+  terraform_destroy:
+    name: Destroy - Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Check Commit Message for [destroy]
+      id: check_commit
+      run: echo ::set-output name=DESTROY::$(if echo "${{ github.event.head_commit.message }}" | grep -q "\[destroy\]"; then echo "true"; else echo "false"; fi)
+
+    - name: Terraform Destroy
+      if: steps.check_commit.outputs.DESTROY == 'true'
+      run: |
+        terraform destroy -var-file="prod.tfvars" -auto-approve
+        working-directory: ./   
