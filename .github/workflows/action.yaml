@@ -34,19 +34,8 @@ jobs:
     - name: Plan Terraform Changes
       run: terraform plan -var-file="prod.tfvars" -out=tfplan
       working-directory: ./
-    
-    - uses: trstringer/manual-approval@v1
-      with:
-        secret: ${{ github.TOKEN }}
-        approvers: bwalkermacedo
-        minimum-approvals: 1
-        issue-title: "Deploying v1.3.5 to prod from staging"
-        issue-body: "Please approve or deny the deployment of version v1.3.5."
-        exclude-workflow-initiator-as-approver: false
-        additional-approved-words: ''
-        additional-denied-words: ''          
-    
-  terraform_cd:
+
+  terraform_cd:  
     name: CD - Terraform Apply
     runs-on: ubuntu-latest
 
@@ -78,3 +67,19 @@ jobs:
     - name: Apply Terraform Changes
       run: terraform apply tfplan
       working-directory: ./
+  approval:
+    needs: terraform_cd
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Request Manual Approval
+      uses: actions/github-script@0.6.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          await github.request('POST /repos/:owner/:repo/actions/workflows/:workflow_id/dispatches', {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            workflow_id: context.workflow,
+            ref: context.ref
+          });      
