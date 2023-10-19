@@ -42,16 +42,9 @@ jobs:
     steps:
     - name: "Aprovação Manual"
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'  # Aprovação manual apenas no branch 'main'
-      uses: octokit/request-action@2.x
+      uses: pullreminders/approve-pull-request@v1
       with:
-        route: PUT /repos/:repository/pulls/:pull_number/reviews
-        repository: ${{ github.repository }}
-        pull_number: ${{ github.event.pull_request.number }}
-        body: |
-          {
-            "event": "APPROVE"
-          }
-        token: ${{ secrets.GITHUB_TOKEN }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   apply:
     needs: approve
