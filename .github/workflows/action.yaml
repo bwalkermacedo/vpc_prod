@@ -9,7 +9,7 @@ jobs:
   terraform_ci:
     name: CI - Terraform Plan
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'  # Executar somente na branch "dev"
+    # if: github.ref == 'refs/heads/dev'  # Executar somente na branch "dev"
 
     steps:
     - name: Checkout code
@@ -77,4 +77,8 @@ jobs:
 
     - name: Apply Terraform Changes
       run: terraform apply tfplan
+<<<<<<< HEAD
       working-directory: ./
+=======
+      working-directory: ./
+>>>>>>> 2f9f6a4 (teste14)
