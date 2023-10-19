@@ -58,10 +58,10 @@ jobs:
       run: terraform init
       working-directory: ./
 
-    # - name: Plan Terraform Changes
-    #   run: terraform plan -var-file="prod.tfvars" -out=tfplan
-    #   working-directory: ./            
+    - name: Plan Terraform Changes
+      run: terraform plan -var-file="prod.tfvars" -out=tfplan
+      working-directory: ./            
 
-    # - name: Apply Terraform Changes
-    #   run: terraform apply tfplan
-    #   working-directory: ./
+    - name: Apply Terraform Changes
+      run: terraform apply tfplan
+      working-directory: ./
