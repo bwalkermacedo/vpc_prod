@@ -10,7 +10,7 @@ jobs:
   terraform_plan:
     name: Terraform Plan
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'  # Executar somente na branch "dev"
+    if: github.ref == 'refs/heads/feature/*'  # Executar somente na branch "dev"
 
     steps:
     - name: Checkout code
