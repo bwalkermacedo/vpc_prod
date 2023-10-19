@@ -39,7 +39,7 @@ jobs:
   terraform_cd:
     name: CD - Terraform Apply
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'  # Executar somente na branch "main"
+    if: github.event.pull_request.target.branch == 'main'  # Executar somente na branch "main"
 
     needs: terraform_ci
 
