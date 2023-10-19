@@ -77,8 +77,4 @@ jobs:
 
     - name: Apply Terraform Changes
       run: terraform apply tfplan
-<<<<<<< HEAD
       working-directory: ./
-=======
-      working-directory: ./
->>>>>>> 2f9f6a4 (teste14)
