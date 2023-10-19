@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "https://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@github.com/bwalkermacedo/modulos-terraform"
+  source = "github.com/bwalkermacedo/modulos-terraform"
 
   name = var.name_vpc
   cidr = var.cidr
