@@ -42,7 +42,6 @@ jobs:
       with:
         files: tfplan
         title: "Automated Terraform Plan PR"
-        files: tfplan
         draft: false
         prerelease: false
         target: main
