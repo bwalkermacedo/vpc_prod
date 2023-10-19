@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source = "github.com/bwalkermacedo/modulos-terraform/vpc"
 
   name = var.name_vpc
   cidr = var.cidr
@@ -9,7 +9,8 @@ module "vpc" {
   public_subnets  = var.public_subnets
 
   enable_nat_gateway = true
-  enable_vpn_gateway = true
+  single_nat_gateway = true
+  enable_vpn_gateway = false
 
   tags = {
     Terraform   = "true"
