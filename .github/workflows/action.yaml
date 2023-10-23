@@ -1,20 +1,18 @@
-name: Terraform CI/CD Pipeline
 
+name: Terraform CI/CD Pipeline
 on:
   push:
     branches:
       - main
 
 jobs:
-  terraform_ci:
+  terraform_ci: 
     name: CI - Terraform Plan
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, '[destroy]')"  # Executar CI se a mensagem do commit não contiver [destroy]
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
     - name: AWS Login
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -97,4 +95,4 @@ jobs:
     - name: Terraform Destroy
       if: steps.check_commit.outputs.DESTROY == 'true'
       run: terraform destroy -var-file="prod.tfvars" -auto-approve
-      working-directory: ./   
+      working-directory: ./ 
