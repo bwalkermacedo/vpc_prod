@@ -70,10 +70,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check Commit Message for [destroy]
-      id: check_commit
-      run: echo ::set-output name=DESTROY::$(if echo "${{ github.event.head_commit.message }}" | grep -q "\[destroy\]"; then echo "true"; else echo "false"; fi)
-          
     - name: Checkout code
       uses: actions/checkout@v2
     
@@ -83,6 +79,10 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1  # Ajuste para a sua região da AWS
+
+    - name: Check Commit Message for [destroy]
+      id: check_commit
+      run: echo ::set-output name=DESTROY::$(if echo "${{ github.event.head_commit.message }}" | grep -q "\[destroy\]"; then echo "true"; else echo "false"; fi)
     
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v1
