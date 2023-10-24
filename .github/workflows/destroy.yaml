@@ -1,16 +1,12 @@
-name: Terraform Destroy
+name: Destroy Workflow
 
 on:
-  workflow_run:
-    workflows: ["Main Workflow Terraform"]
-    types:
-      - workflow_run
+  workflow_dispatch
 
 jobs:
   terraform_destroy:
     name: Destroy - Terraform
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
