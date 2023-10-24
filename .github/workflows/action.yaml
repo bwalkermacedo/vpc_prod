@@ -11,6 +11,7 @@ jobs:
     steps:
       - name: Determine Workflow
         id: check_commit
+        if: "!contains(github.event.head_commit.message, '[destroy]')"  # Executar CI se a mensagem do commit não contiver [destroy]    
         run: echo ::set-output name=COMMIT_MESSAGE::${{ github.event.head_commit.message }}
 
   terraform_destroy:
