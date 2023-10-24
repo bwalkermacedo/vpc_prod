@@ -16,7 +16,7 @@ jobs:
   trigger_test_workflow:
     runs-on: ubuntu-latest
     needs: [determine_workflow]
-    if: steps.determine_workflow.outputs.COMMIT_MESSAGE == '[destroy]'
+    if: steps.determine_workflow.outputs.COMMIT_MESSAGE == 'destroy'
     steps:
       - name: Destroy Workflow
         uses: peter-evans/workflow-dispatch@v1
@@ -26,7 +26,7 @@ jobs:
   trigger_other_workflow:
     runs-on: ubuntu-latest
     needs: [determine_workflow]
-    if: steps.determine_workflow.outputs.COMMIT_MESSAGE != '[destroy]'
+    if: steps.determine_workflow.outputs.COMMIT_MESSAGE != 'destroy'
     steps:
       - name: Trigger Terraform Plan and Apply
         uses: peter-evans/workflow-dispatch@v1
