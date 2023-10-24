@@ -16,7 +16,7 @@ jobs:
   terraform_destroy:
     runs-on: ubuntu-latest
     needs: [determine_workflow]
-    if: steps.determine_workflow.outputs.COMMIT_MESSAGE == 'destroy'
+    if: "!contains(github.event.head_commit.message, '[destroy]')"  # Executar CI se a mensagem do commit não contiver [destroy]
     steps:
       # - name: Destroy Workflow
       #   uses: peter-evans/workflow-dispatch@v1
