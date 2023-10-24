@@ -68,6 +68,7 @@ jobs:
   terraform_destroy:
     name: Destroy - Terraform
     runs-on: ubuntu-latest
+    if: ${{ needs.terraform_ci.outputs.DESTROY }} == 'true'   
 
     steps:
     - name: Checkout code
