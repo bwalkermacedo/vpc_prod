@@ -1,10 +1,8 @@
 name: Terraform Plan and Apply
 
 on:
-  workflow_run:
-    workflows: ["Main Workflow Terraform"]
-    types:
-      - workflow_run
+  workflow_dispatch
+
 jobs:
   terraform_ci: 
     name: CI - Terraform Plan
@@ -62,5 +60,5 @@ jobs:
       working-directory: ./            
 
     - name: Apply Terraform Changes
-      run: terraform apply tfplan
+      run: terraform apply tfplann
       working-directory: ./
