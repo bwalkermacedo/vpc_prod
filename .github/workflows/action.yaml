@@ -9,7 +9,7 @@ jobs:
   terraform_ci: 
     name: CI - Terraform Plan
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[destroy]')"  # Executar CI se a mensagem do commit não contiver [destroy]
+    if: "contains(github.event.head_commit.message, '[destroy]')"  # Executar CI se a mensagem do commit não contiver [destroy]
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
