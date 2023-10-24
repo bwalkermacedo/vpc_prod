@@ -1,8 +1,11 @@
 name: Terraform Plan and Apply
 
 on:
-  workflow_dispatch
-
+  workflow_run:
+    workflows: ["Main Workflow"]
+    types:
+      - workflow_run
+      
 jobs:
   terraform_ci: 
     name: CI - Terraform Plan

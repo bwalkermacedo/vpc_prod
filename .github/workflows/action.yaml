@@ -13,26 +13,29 @@ jobs:
         id: check_commit
         run: echo ::set-output name=COMMIT_MESSAGE::${{ github.event.head_commit.message }}
 
-  trigger_test_workflow:
+  terraform_destroy:
     runs-on: ubuntu-latest
     needs: [determine_workflow]
     # if: steps.determine_workflow.outputs.COMMIT_MESSAGE == 'destroy'
     steps:
-      - name: Destroy Workflow
-        uses: peter-evans/workflow-dispatch@v1
-        with:
-          workflow: Destroy Workflow
+      # - name: Destroy Workflow
+      #   uses: peter-evans/workflow-dispatch@v1
+      #   with:
+      #     workflow: Destroy Workflow
+      - name: Trigger Test Workflow
+        run: echo "Test Workflow should be triggered"      
 
   trigger_other_workflow:
     runs-on: ubuntu-latest
     needs: [determine_workflow]
     # if: steps.determine_workflow.outputs.COMMIT_MESSAGE != 'destroy'
     steps:
-      - name: Trigger Terraform Plan and Apply
-        uses: peter-evans/workflow-dispatch@v1
-        with:
-          workflow: Terraform Plan and Apply
-
+      # - name: Trigger Terraform Plan and Apply
+      #   uses: peter-evans/workflow-dispatch@v1
+      #   with:
+      #     workflow: Terraform Plan and Apply
+      - name: Trigger Other Workflow
+        run: echo "Other Workflow should be triggered"
 
 
 
