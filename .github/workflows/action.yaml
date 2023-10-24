@@ -24,8 +24,7 @@ jobs:
       #   with:
       #     workflow: Destroy Workflow
       - name: Trigger Test Workflow
-        run: echo "Test Workflow should be triggered"      
-
+        run: .github/workflows/destroy.yaml
   terraform_plan_apply:
     name: teste apply
     runs-on: ubuntu-latest
